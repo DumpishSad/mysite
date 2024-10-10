@@ -1,0 +1,36 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block body_class %}
+    {% if not body_class %}home-bg{% endif %}
+{% endblock %}
+
+{% block content %}
+    <style>
+        body {
+            background-image: url('/static/home.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .center-content {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+        }
+    </style>
+
+    <div class="container center-content">
+        <h1 class="mt-5">Добро пожаловать на наш сайт!</h1>
+        <p>Здесь вы можете загружать изображения, редактировать их и использовать наш инструмент для обнаружения объектов.</p>
+        <p>Начните с загрузки изображения и редактирования с помощью доступных инструментов.</p>
+    </div>
+{% endblock %}

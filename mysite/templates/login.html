@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block body_class %}login-bg{% endblock %}
+
+{% block content %}
+    <style>
+        .login-bg {
+            background-image: url('/static/login_photo.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+
+    <div class="form-wrapper">
+        <div class="form-background"></div>
+        <div class="form-container">
+            <h2>Вход</h2>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </form>
+            {% if messages %}
+                <ul class="alert alert-danger mt-3">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

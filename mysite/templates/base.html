@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            color: white;
+        }
+
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .settings-icon a {
+            color: white;
+        }
+
+        .form-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .form-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        .dropdown-menu {
+            background-color: transparent;
+            border: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        h1, h2 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        }
+
+        p {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 1)
+        }
+
+        .rounded-input {
+            background-color: rgba(255, 224, 230, 0.8);
+        }
+        .is-invalid {
+            border-color: #dc3545;
+        }
+
+    .alert {
+        margin-top: 10px;
+    }
+    </style>
+</head>
+<body class="{% block body_class %} {% endblock %}">
+    <div class="settings-icon dropdown">
+        <a href="#" data-toggle="dropdown">
+            <i class="fa-solid fa-gear"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="{% url 'register' %}">Регистрация</a>
+            <a class="dropdown-item" href="{% url 'login' %}">Вход</a>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/4bdb75d52d.js" crossorigin="anonymous"></script>
+</body>
+</html>
