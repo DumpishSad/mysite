@@ -1,0 +1,37 @@
+<!-- dropdown_menu.html -->
+<div class="settings-icon dropdown">
+    <a href="#" data-toggle="dropdown">
+        <i class="fa-solid fa-gear"></i>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="{% url 'home' %}">Главная страница</a>
+        <a class="dropdown-item" href="{% url 'register' %}">Регистрация</a>
+        <a class="dropdown-item" href="{% url 'login' %}">Вход</a>
+    </div>
+</div>
+
+<style>
+    .settings-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 1.5em;
+        cursor: pointer;
+        z-index: 2;
+    }
+
+    .settings-icon a {
+        color: white;
+    }
+
+    .dropdown-menu {
+        background-color: transparent;
+        border: none;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+</style>

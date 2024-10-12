@@ -13,6 +13,11 @@
             background-attachment: fixed;
             background-position: center;
         }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 0.25em;
+        }
     </style>
 
     <div class="form-wrapper">
@@ -21,7 +26,63 @@
             <h2>Регистрация</h2>
             <form method="post" novalidate>
                 {% csrf_token %}
-                {{ form.as_p }}
+
+                <!-- Поле для имени -->
+                <div class="form-group">
+                    {{ form.first_name.label_tag }}
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <div class="error-message">
+                            {{ form.first_name.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле для фамилии -->
+                <div class="form-group">
+                    {{ form.last_name.label_tag }}
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <div class="error-message">
+                            {{ form.last_name.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле для имени пользователя -->
+                <div class="form-group">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="error-message">
+                            {{ form.username.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле для пароля -->
+                <div class="form-group">
+                    {{ form.password.label_tag }}
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="error-message">
+                            {{ form.password.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Поле для подтверждения пароля -->
+                <div class="form-group">
+                    {{ form.confirm_password.label_tag }}
+                    {{ form.confirm_password }}
+                    {% if form.confirm_password.errors %}
+                        <div class="error-message">
+                            {{ form.confirm_password.errors|join:", " }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Кнопка регистрации -->
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
             </form>
         </div>

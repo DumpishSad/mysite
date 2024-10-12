@@ -26,11 +26,48 @@
             text-align: center;
             z-index: 2;
         }
+
+        .open-editor-button {
+            background: transparent;
+            backdrop-filter: blur(15px);
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .open-editor-button:focus {
+            outline: none;
+        }
+
+        .open-editor-button:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .open-editor-button:active {
+            outline: none;
+            transform: scale(0.95);
+        }
+
+        p {
+            font-size: 18px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
     </style>
 
     <div class="container center-content">
         <h1 class="mt-5">Добро пожаловать на наш сайт!</h1>
         <p>Здесь вы можете загружать изображения, редактировать их и использовать наш инструмент для обнаружения объектов.</p>
         <p>Начните с загрузки изображения и редактирования с помощью доступных инструментов.</p>
+
+        <!-- Кнопка для открытия редактора -->
+        <button class="open-editor-button" onclick="window.location.href='{% url 'editor' %}'">
+            Открыть редактор
+        </button>
     </div>
 {% endblock %}
