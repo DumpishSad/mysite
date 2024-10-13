@@ -1,12 +1,14 @@
 import os
 
+import cv2
+import torch
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage, FileSystemStorage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, ImageUploadForm
 from django.contrib import messages
 
 def home(request):
@@ -63,3 +65,34 @@ def download_image(request, filename):
             return response
     else:
         return HttpResponse("File not found.", status=404)
+
+
+model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
+
+def detect_objects(image_path):
+    results = model(image_path)
+    results.render()
+    return results
+
+def image_upload(request):
+    image_url = None
+    if request.method == 'POST':
+        form = ImageUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_image = form.cleaned_data['image']
+            image_path = default_storage.save(uploaded_image.name, uploaded_image)
+            image_path_full = default_storage.path(image_path)
+
+            results = detect_objects(image_path_full)
+
+            annotated_image = results.ims[0]
+            annotated_image_path = f"media/annotated_{uploaded_image.name}"
+            cv2.imwrite(annotated_image_path, annotated_image)
+
+            image_url = f"/media/annotated_{uploaded_image.name}"
+    else:
+        form = ImageUploadForm()
+
+    return render(request, 'upload.html', {'form': form, 'image_url': image_url})
+
+

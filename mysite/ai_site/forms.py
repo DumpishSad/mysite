@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 
+
 class RegistrationForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Пароль', 'class': 'rounded-input'}),
@@ -69,14 +70,14 @@ class LoginForm(forms.Form):
         max_length=50,
         widget=forms.TextInput(attrs={'placeholder': 'Имя пользователя', 'class': 'rounded-input'}),
         label='',
-        error_messages = {
+        error_messages={
             'required': 'Это поле обязательно для заполнения.',
         }
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Пароль', 'class': 'rounded-input'}),
         min_length=8,
-        label = '',
+        label='',
         error_messages={
             'required': 'Это поле обязательно для заполнения.',
             'min_length': 'Пароль должен содержать не менее 8 символов.',
@@ -87,3 +88,7 @@ class LoginForm(forms.Form):
         super(LoginForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control rounded-input'})
+
+
+class ImageUploadForm(forms.Form):
+    image = forms.ImageField()

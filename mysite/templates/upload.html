@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Распознавание объектов</title>
+</head>
+<body>
+    <h1>Распознавание объектов на изображении</h1>
+
+    {% if image_url %}
+        <h2>Результат распознавания:</h2>
+        <img src="{{ image_url }}" alt="Распознанное изображение">
+        <br><br>
+        <a href="{% url 'image_upload' %}">Загрузить другое изображение</a>
+    {% else %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Загрузить и распознать</button>
+        </form>
+    {% endif %}
+</body>
+</html>
