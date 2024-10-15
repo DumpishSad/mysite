@@ -35,6 +35,7 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
+                request.session['username'] = user.username
                 return redirect('home')
             else:
                 form.add_error('username', 'Неверное имя пользователя или пароль')

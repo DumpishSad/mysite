@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ai_site.context_processors.user_context'
             ],
         },
     },
@@ -134,4 +135,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+SESSION_COOKIE_AGE = 3600  # Длительность сессии в секундах (1 час)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Сессия не истекает при закрытии браузера
+SESSION_SAVE_EVERY_REQUEST = True  # Обновляет сессию при каждом запросе
