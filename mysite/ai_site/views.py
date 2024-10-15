@@ -94,5 +94,3 @@ def image_upload(request):
         form = ImageUploadForm()
 
     return render(request, 'upload.html', {'form': form, 'image_url': image_url})
-
-

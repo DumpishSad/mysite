@@ -1,4 +1,3 @@
-<!-- templates/home.html -->
 {% extends 'base.html' %}
 
 {% block title %}Главная страница{% endblock %}
@@ -27,7 +26,13 @@
             z-index: 2;
         }
 
-        .open-editor-button {
+        .button-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .open-editor-button, .open-recognition-button {
             background: transparent;
             backdrop-filter: blur(15px);
             border: none;
@@ -40,15 +45,15 @@
             transition: transform 0.3s ease;
         }
 
-        .open-editor-button:focus {
+        .open-editor-button:focus, .open-recognition-button:focus {
             outline: none;
         }
 
-        .open-editor-button:hover {
+        .open-editor-button:hover, .open-recognition-button:hover {
             color: rgba(255, 255, 255, 0.5);
         }
 
-        .open-editor-button:active {
+        .open-editor-button:active, .open-recognition-button:active {
             outline: none;
             transform: scale(0.95);
         }
@@ -65,8 +70,15 @@
         <p>Здесь вы можете загружать изображения, редактировать их и использовать наш инструмент для обнаружения объектов.</p>
         <p>Начните с загрузки изображения и редактирования с помощью доступных инструментов.</p>
 
-        <button class="open-editor-button" onclick="window.location.href='{% url 'editor' %}'">
-            Открыть редактор
-        </button>
+        <!-- Контейнер для кнопок в одну строку -->
+        <div class="button-row">
+            <button class="open-editor-button" onclick="window.location.href='{% url 'editor' %}'">
+                Открыть редактор
+            </button>
+
+            <button class="open-recognition-button" onclick="window.location.href='{% url 'image_upload' %}'">
+                Распознавание объектов
+            </button>
+        </div>
     </div>
 {% endblock %}

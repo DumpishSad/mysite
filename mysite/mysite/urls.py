@@ -26,7 +26,6 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
     path('editor/', editor_view, name='editor'),
-    path('download/<str:filename>/', download_image, name='download_image'),
     path('upload/', image_upload, name='image_upload'),
 ]
 

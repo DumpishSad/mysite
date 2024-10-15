@@ -1,23 +1,132 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block title %}Распознавание объектов{% endblock %}
+
+{% load static %}
+
+{% block content %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Распознавание объектов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            color: white;
+            background: url('{% static "editor_photo.jpg" %}');
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            width: 900px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(50px);
+            transition: background 0.7s ease;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        label {
+            display: inline-block;
+            margin-bottom: 0;
+        }
+
+        .button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+            outline: none;
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 20px;
+            margin-top: 10px;
+            object-fit: contain;
+        }
+
+        #file-input {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    {% include 'dropdown_menu.html' %}
+
     <h1>Распознавание объектов на изображении</h1>
 
-    {% if image_url %}
-        <h2>Результат распознавания:</h2>
-        <img src="{{ image_url }}" alt="Распознанное изображение">
-        <br><br>
-        <a href="{% url 'image_upload' %}">Загрузить другое изображение</a>
-    {% else %}
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Загрузить и распознать</button>
-        </form>
-    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="button-container">
+            <label for="file-input" class="button file-upload-label">
+                <i class="fas fa-upload"></i>
+            </label>
+            <input type="file" id="file-input" name="image" accept="image/*" onchange="this.form.submit()">
+            <button type="button" class="button" id="download-image-button">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+
+        <div class="container">
+            {% if image_url %}
+                <h2>Результат распознавания:</h2>
+                <img src="{{ image_url }}" alt="Распознанное изображение">
+            {% else %}
+                <!-- Изображение по умолчанию -->
+                <h2>Пример распознавания:</h2>
+                <img src="{% static 'default_image_cat.jpg' %}" alt="Пример изображения">
+            {% endif %}
+        </div>
+    </form>
+
+    <script>
+        const downloadFile = (fileUrl, fileName) => {
+            const link = document.createElement('a');
+            link.style.display = 'none';
+            link.href = fileUrl;
+            link.download = fileName || 'downloaded-image.png';
+            document.body.appendChild(link);
+            link.click();
+            setTimeout(() => {
+                document.body.removeChild(link);
+            }, 0);
+        };
+
+        document.getElementById('download-image-button').addEventListener('click', () => {
+            const imageUrl = "{{ image_url|default_if_none:'' }}";
+            const defaultUrl = "{% static 'default_image.jpg' %}";
+            downloadFile(imageUrl || defaultUrl, 'recognized-image.png');
+        });
+    </script>
 </body>
 </html>
+{% endblock %}
