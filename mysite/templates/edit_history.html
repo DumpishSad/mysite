@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}История редактирования{% endblock %}
+{% load tz %}
+{% block content %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>История редактирования</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            color: white;
+            background: url('/static/editor_photo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            overflow-y: scroll;
+
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+
+        ::-webkit-scrollbar {
+            width: 0;
+        }
+
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card img {
+            border-radius: 10px 10px 0 0;
+            width: 100%;
+            height: auto;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    {% include 'dropdown_menu.html' %}
+
+    <h2>История редактирования</h2>
+    <div class="container">
+        {% if history %}
+            <div class="row">
+                {% for edit in history %}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="{{ edit.edited_image_path }}" class="card-img-top" alt="Изображение {{ edit.image_name }}">
+                            <div class="card-body">
+                                <p class="card-text">{{ edit.timestamp|localtime|date:"Y-m-d H:i:s" }}</p>
+                                <a href="{% url 'editor_view' edit.edited_image_path %}" class="btn btn-primary">Редактировать</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>У вас пока нет истории редактирования.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

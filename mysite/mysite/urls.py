@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from ai_site.views import home, register_view, login_view, editor_view, download_image, image_upload
+from ai_site.views import home, register_view, login_view, editor_view, download_image, image_upload, edit_history_view
 from django.urls import path
 
 urlpatterns = [
@@ -27,7 +27,10 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('editor/', editor_view, name='editor'),
     path('upload/', image_upload, name='image_upload'),
+    path('history/', edit_history_view, name='edit_history'),
+    path('editor/<path:image_path>/', editor_view, name='editor_view'),
 ]
 
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

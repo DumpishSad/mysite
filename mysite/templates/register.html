@@ -27,7 +27,6 @@
             <form method="post" novalidate>
                 {% csrf_token %}
 
-                <!-- Поле для имени -->
                 <div class="form-group">
                     {{ form.first_name.label_tag }}
                     {{ form.first_name }}
@@ -38,7 +37,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Поле для фамилии -->
                 <div class="form-group">
                     {{ form.last_name.label_tag }}
                     {{ form.last_name }}
@@ -49,7 +47,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Поле для имени пользователя -->
                 <div class="form-group">
                     {{ form.username.label_tag }}
                     {{ form.username }}
@@ -60,7 +57,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Поле для пароля -->
                 <div class="form-group">
                     {{ form.password.label_tag }}
                     {{ form.password }}
@@ -71,7 +67,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Поле для подтверждения пароля -->
                 <div class="form-group">
                     {{ form.confirm_password.label_tag }}
                     {{ form.confirm_password }}
@@ -82,7 +77,6 @@
                     {% endif %}
                 </div>
 
-                <!-- Кнопка регистрации -->
                 <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
             </form>
         </div>

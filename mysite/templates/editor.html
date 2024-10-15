@@ -82,94 +82,142 @@
 <body class="{% block body_class %}{% endblock %}">
     {% include 'dropdown_menu.html' %}
     <h1>Редактор</h1>
-    <div class="button-container">
-        <label for="file-input" class="button file-upload-label">
-            <i class="fas fa-upload"></i>
-        </label>
-        <input type="file" id="file-input" accept="image/*">
 
-        <button type="button" id="download-image-button" class="button">
-            <i class="fas fa-download"></i>
-        </button>
+    <!-- Форма для загрузки изображения -->
+    <form method="POST" enctype="multipart/form-data" id="upload-form">
+        {% csrf_token %}
+        <div class="button-container">
+            <label for="file-input" class="button file-upload-label">
+                <i class="fas fa-upload"></i>
+            </label>
+            <input type="file" name="image" id="file-input" accept="image/*" required>
 
-        <button type="button" id="toggle-theme-button" class="button">
-            <i class="fas fa-adjust"></i>
-        </button>
-    </div>
+            <button type="button" id="download-image-button" class="button">
+                <i class="fas fa-download"></i>
+            </button>
+
+            <button type="button" id="toggle-theme-button" class="button">
+                <i class="fas fa-adjust"></i>
+            </button>
+        </div>
+    </form>
 
     <div class="my-editor"></div>
 
     <script type="module">
-        import {
-            appendDefaultEditor,
-            setPlugins,
-            plugin_crop,
-            plugin_finetune,
-            plugin_filter,
-            plugin_annotate,
-            locale_en_gb
-        } from "{% static 'pintura/pintura.js' %}";
+    import {
+        appendDefaultEditor,
+        setPlugins,
+        plugin_crop,
+        plugin_finetune,
+        plugin_filter,
+        plugin_annotate,
+        locale_en_gb
+    } from "{% static 'pintura/pintura.js' %}";
 
-        setPlugins(plugin_crop, plugin_finetune, plugin_filter, plugin_annotate);
+    setPlugins(plugin_crop, plugin_finetune, plugin_filter, plugin_annotate);
 
-        const defaultImageSrc = "{% static 'default_image.jpg' %}";
+    const defaultImageSrc = "{{ image_url|default:default_image_url  }}";
 
-        const editor = appendDefaultEditor(".my-editor", {
-            src: defaultImageSrc,
-            locale: locale_en_gb,
-            enableButtonExport: false
-        });
 
-        const downloadFile = (file) => {
-            const link = document.createElement('a');
-            link.style.display = 'none';
-            link.href = URL.createObjectURL(file);
-            link.download = file.name || 'edited-image.png';
-            document.body.appendChild(link);
-            link.click();
-            setTimeout(() => {
-                URL.revokeObjectURL(link.href);
-                link.parentNode.removeChild(link);
-            }, 0);
-        };
+    const editor = appendDefaultEditor(".my-editor", {
+        src: defaultImageSrc,
+        locale: locale_en_gb,
+        enableButtonExport: false
+    });
 
-        document.getElementById('file-input').addEventListener('change', (event) => {
-            const selectedFile = event.target.files[0];
-            if (selectedFile) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    editor.loadImage(event.target.result).then(() => {});
-                };
-                reader.readAsDataURL(selectedFile);
-                document.getElementById('file-input').value = '';
-            }
-        });
+    const downloadFile = (file) => {
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = URL.createObjectURL(file);
+        link.download = file.name || 'edited-image.png';
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+            URL.revokeObjectURL(link.href);
+            link.parentNode.removeChild(link);
+        }, 0);
+    };
 
-        document.getElementById('download-image-button').addEventListener('click', () => {
-            editor.processImage().then((imageWriterResult) => {
-                if (imageWriterResult.dest) {
-                    downloadFile(imageWriterResult.dest);
-                } else {
-                    downloadFile(defaultImageSrc);
+    document.getElementById('file-input').addEventListener('change', (event) => {
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                editor.loadImage(event.target.result).then(() => {});
+            };
+            reader.readAsDataURL(selectedFile);
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
                 }
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Изображение загружено успешно');
+                } else {
+                    console.error('Ошибка при загрузке изображения');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка сети:', error);
             });
-        });
 
-        document.getElementById('toggle-theme-button').addEventListener('click', () => {
-            const currentBackground = getComputedStyle(document.querySelector('.pintura-editor')).getPropertyValue('--color-background').trim();
-            const themeButtonIcon = document.querySelector('#toggle-theme-button i');
+            document.getElementById('file-input').value = '';
+        }
+    });
 
-            if (currentBackground === '255, 182, 193') {
-                document.querySelector('.pintura-editor').style.setProperty('--color-background', '0, 0, 0');
-                document.querySelector('.pintura-editor').style.setProperty('--color-foreground', '255, 255, 255');
-                themeButtonIcon.style.color = 'black';
+    document.getElementById('download-image-button').addEventListener('click', () => {
+        editor.processImage().then((imageWriterResult) => {
+            if (imageWriterResult.dest) {
+                const formData = new FormData();
+                const editedImageBlob = new Blob([imageWriterResult.dest], { type: 'image/png' });
+                formData.append('image', editedImageBlob, 'edited-image.png');
+
+                fetch('', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}' // Передаем CSRF токен
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Отредактированное изображение загружено успешно');
+                        downloadFile(editedImageBlob); // Скачиваем отредактированное изображение
+                    } else {
+                        console.error('Ошибка при загрузке отредактированного изображения');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка сети:', error);
+                });
             } else {
-                document.querySelector('.pintura-editor').style.setProperty('--color-background', '255, 182, 193');
-                document.querySelector('.pintura-editor').style.setProperty('--color-foreground', '0, 0, 0');
-                themeButtonIcon.style.color = 'white';
+                downloadFile(defaultImageSrc);
             }
         });
-    </script>
+    });
+
+    document.getElementById('toggle-theme-button').addEventListener('click', () => {
+        const currentBackground = getComputedStyle(document.querySelector('.pintura-editor')).getPropertyValue('--color-background').trim();
+        const themeButtonIcon = document.querySelector('#toggle-theme-button i');
+
+        if (currentBackground === '255, 182, 193') {
+            document.querySelector('.pintura-editor').style.setProperty('--color-background', '0, 0, 0');
+            document.querySelector('.pintura-editor').style.setProperty('--color-foreground', '255, 255, 255');
+            themeButtonIcon.style.color = 'black';
+        } else {
+            document.querySelector('.pintura-editor').style.setProperty('--color-background', '255, 182, 193');
+            document.querySelector('.pintura-editor').style.setProperty('--color-foreground', '0, 0, 0');
+            themeButtonIcon.style.color = 'white';
+        }
+    });
+</script>
 </body>
 </html>
 {% endblock %}

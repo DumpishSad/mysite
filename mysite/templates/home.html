@@ -68,7 +68,7 @@
     <div class="container center-content">
         <h1 class="mt-5">
             {% if username %}
-                Добро пожаловать, {{ username }}!
+                Добро пожаловать, {{ user.username }}!
             {% else %}
                 Добро пожаловать на наш сайт!
             {% endif %}
@@ -77,15 +77,24 @@
         <p>Здесь вы можете загружать изображения, редактировать их и использовать наш инструмент для обнаружения объектов.</p>
         <p>Начните с загрузки изображения и редактирования с помощью доступных инструментов.</p>
 
-        <!-- Контейнер для кнопок в одну строку -->
         <div class="button-row">
-            <button class="open-editor-button" onclick="window.location.href='{% url 'editor' %}'">
-                Открыть редактор
-            </button>
+            {% if user.is_authenticated %}
+                <button class="open-editor-button" onclick="window.location.href='{% url 'editor' %}'">
+                    Открыть редактор
+                </button>
 
-            <button class="open-recognition-button" onclick="window.location.href='{% url 'image_upload' %}'">
-                Распознавание объектов
-            </button>
+                <button class="open-recognition-button" onclick="window.location.href='{% url 'image_upload' %}'">
+                    Распознавание объектов
+                </button>
+            {% else %}
+                <button class="open-editor-button" onclick="window.location.href='{% url 'register' %}'">
+                    Открыть редактор
+                </button>
+
+                <button class="open-recognition-button" onclick="window.location.href='{% url 'register' %}'">
+                    Распознавание объектов
+                </button>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
