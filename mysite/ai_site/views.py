@@ -13,7 +13,7 @@ def home(request):
 
 
 def register_view(request):
-    if request.method == 'POST':
+    if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -28,7 +28,7 @@ def register_view(request):
 
 def login_view(request):
     form = LoginForm(request.POST or None)
-    if request.method == 'POST':
+    if request.POST:
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -48,7 +48,7 @@ from django.core.files.storage import FileSystemStorage
 
 
 def editor_view(request, image_path=None):
-    if request.method == 'POST' and request.FILES.get('image'):
+    if request.POST and request.FILES.get('image'):
         uploaded_image = request.FILES['image']
         fs = FileSystemStorage()
         image_name = fs.save(uploaded_image.name, uploaded_image)
@@ -82,7 +82,7 @@ def image_upload(request):
     image_url = None
     form = ImageUploadForm(request.POST or None, request.FILES or None)
 
-    if request.method == 'POST' and form.is_valid():
+    if request.POST and form.is_valid():
         uploaded_image = form.cleaned_data['image']
 
         image_path = default_storage.save(uploaded_image.name, uploaded_image)
@@ -94,7 +94,7 @@ def image_upload(request):
         cv2.imwrite(annotated_image_path, annotated_image)
         image_url = f"/{annotated_image_path}"
     else:
-        if request.method == 'POST':
+        if request.POST:
             print("Form is not valid:", form.errors)
 
     return render(request, 'upload.html', {'form': form, 'image_url': image_url})
