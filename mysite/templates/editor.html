@@ -2,30 +2,18 @@
 
 {% block title %}Редактор фото{% endblock %}
 
+{% block body_class %}editor-bg{% endblock %}
+
 {% load static %}
 
 {% block content %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Editor</title>
     <link rel="stylesheet" href="{% static 'pintura/pintura.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            color: white;
-            background: url('/static/editor_photo.jpg');
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            transition: background-color 0.5s ease;
-        }
-
         .my-editor {
             height: 600px;
             width: 60%;
@@ -79,11 +67,7 @@
         }
     </style>
 </head>
-<body class="{% block body_class %}{% endblock %}">
-    {% include 'dropdown_menu.html' %}
     <h1>Редактор</h1>
-
-    <!-- Форма для загрузки изображения -->
     <form method="POST" enctype="multipart/form-data" id="upload-form">
         {% csrf_token %}
         <div class="button-container">
@@ -218,6 +202,5 @@
         }
     });
 </script>
-</body>
 </html>
 {% endblock %}

@@ -1,12 +1,80 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'cat.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             color: white;
+        }
+
+        .home-bg {
+            background-image: url('/static/home.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .login-bg {
+            background-image: url('/static/login_photo.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .register-bg {
+            background-image: url('/static/reg_photo.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .editor-bg {
+            color: white;
+            background: url('/static/editor_photo.jpg');
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.5s ease;
+        }
+
+        .upload-bg {
+            color: white;
+            background: url('/static/editor_photo.jpg');
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .edit_history-bg {
+            color: white;
+            background: url('/static/editor_photo.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            height: 100vh;
+            overflow-y: scroll;
+
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+            box-sizing: border-box;
+            position: relative;
         }
 
         .form-container {
@@ -27,21 +95,12 @@
             position: relative;
         }
 
-        .form-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 1;
-        }
-
         h1, h2 {
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
         }
 
         p {
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 1)
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
         }
 
         .rounded-input {
@@ -73,12 +132,26 @@
         .alert {
             margin-top: 10px;
         }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 0.25em;
+            text-shadow:
+                -1px -1px 0 white,
+                1px -1px 0 white,
+                -1px 1px 0 white,
+                1px 1px 0 white;
+        }
+
+        {% block page_styles %}{% endblock %}
     </style>
 </head>
 <body class="{% block body_class %} {% endblock %}">
     {% block dropdown_menu %}
     {% include 'dropdown_menu.html' %}
     {% endblock %}
+
     {% block content %} {% endblock %}
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

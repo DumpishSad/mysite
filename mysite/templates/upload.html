@@ -2,6 +2,8 @@
 
 {% block title %}Распознавание объектов{% endblock %}
 
+{% block body_class %}upload-bg{% endblock %}
+
 {% load static %}
 
 {% block content %}
@@ -12,18 +14,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
-            color: white;
-            background: url('{% static "editor_photo.jpg" %}');
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
         .container {
             text-align: center;
             width: 900px;
@@ -40,7 +30,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            align-items: flex-start;
+            margin-bottom: 20px;
         }
 
         label {

@@ -1,43 +1,21 @@
 {% extends 'base.html' %}
 
 {% block title %}История редактирования{% endblock %}
+
+{% block body_class %}edit_history-bg{% endblock %}
+
 {% load tz %}
+
 {% block content %}
 <html lang="ru">
 <head>
+    <h1>История редактирования</h1>
     <meta charset="UTF-8">
-    <title>История редактирования</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            color: white;
-            background: url('/static/editor_photo.jpg') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-            overflow-y: scroll;
-
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 20px;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-
-        ::-webkit-scrollbar {
+    ::-webkit-scrollbar {
             width: 0;
         }
-
-
-        h2 {
-            margin-bottom: 20px;
-            text-align: center;
-            z-index: 1;
-        }
-
         .container {
             display: flex;
             flex-direction: column;
@@ -58,7 +36,8 @@
         .card img {
             border-radius: 10px 10px 0 0;
             width: 100%;
-            height: auto;
+            height: 200px;
+            object-fit: cover;
         }
 
         .card-body {
@@ -76,10 +55,6 @@
         }
     </style>
 </head>
-<body class="{% block body_class %}{% endblock %}">
-    {% include 'dropdown_menu.html' %}
-
-    <h2>История редактирования</h2>
     <div class="container">
         {% if history %}
             <div class="row">
@@ -99,6 +74,5 @@
             <p>У вас пока нет истории редактирования.</p>
         {% endif %}
     </div>
-</body>
 </html>
 {% endblock %}

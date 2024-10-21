@@ -2,20 +2,9 @@
 
 {% block title %}Главная страница{% endblock %}
 
-{% block body_class %}
-    {% if not body_class %}home-bg{% endif %}
-{% endblock %}
+{% block body_class %}home-bg{% endblock %}
 
-{% block content %}
-    <style>
-        body {
-            background-image: url('/static/home.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-position: center;
-        }
-
+{% block page_styles %}
         .center-content {
             height: 100vh;
             display: flex;
@@ -58,14 +47,10 @@
             transform: scale(0.95);
         }
 
-        p {
-            font-size: 18px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }
-    </style>
+{% endblock %}
 
-    <div class="container center-content">
+{% block content %}
+    <div class="center-content">
         <h1 class="mt-5">
             {% if username %}
                 Добро пожаловать, {{ user.username }}!

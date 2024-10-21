@@ -1,11 +1,7 @@
-import os
-
 import cv2
 import torch
-from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.core.files.storage import default_storage
-from django.http import HttpResponse
 from .forms import RegistrationForm, LoginForm, ImageUploadForm
 from django.templatetags.static import static
 from django.utils import timezone
@@ -73,19 +69,6 @@ def editor_view(request, image_path=None):
 
     return render(request, 'editor.html', {'image_url': image_url, 'default_image_url': default_image_url})
 
-
-def download_image(request, filename):
-    file_path = os.path.join(settings.MEDIA_ROOT, filename)
-
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='image/jpeg')
-            response['Content-Disposition'] = f'attachment; filename="{filename}"'
-            return response
-    else:
-        return HttpResponse("File not found.", status=404)
-
-
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
 
 
@@ -109,17 +92,6 @@ def image_upload(request):
         annotated_image = results.ims[0]
         annotated_image_path = f"media/annotated_{uploaded_image.name}"
         cv2.imwrite(annotated_image_path, annotated_image)
-
-        if request.user.is_authenticated:
-            EditHistory.objects.create(
-                user=request.user,
-                image_name=uploaded_image.name,
-                edited_image_path=annotated_image_path
-            )
-            print("History saved successfully.")
-        else:
-            print("User is not authenticated.")
-
         image_url = f"/{annotated_image_path}"
     else:
         if request.method == 'POST':

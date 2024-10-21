@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from ai_site.views import home, register_view, login_view, editor_view, download_image, image_upload, edit_history_view
+from ai_site.views import home, register_view, login_view, editor_view, image_upload, edit_history_view
 from django.urls import path
 
 urlpatterns = [
