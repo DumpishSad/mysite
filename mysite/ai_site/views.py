@@ -9,10 +9,19 @@ import pytz
 
 
 def home(request):
+    """
+    Отображает главную страницу приложения.
+    """
     return render(request, 'home.html')
 
 
 def register_view(request):
+    """
+    Отображает страницу регистрации пользователя
+
+    Это представление обрабатывает регистрацию пользователей. Если форма валидна,
+    сохраняет нового пользователя и выполняет вход в систему.
+    """
     if request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -27,6 +36,12 @@ def register_view(request):
 
 
 def login_view(request):
+    """
+    Отоброжает страницу входа пользователя
+
+    Это представление обрабатывает вход пользователей в систему. Проверяет корректность введенных данных
+    и, при успехе, выполняет вход и сохраняет имя пользователя в сессии.
+    """
     form = LoginForm(request.POST or None)
     if request.POST:
         if form.is_valid():
@@ -48,6 +63,12 @@ from django.core.files.storage import FileSystemStorage
 
 
 def editor_view(request, image_path=None):
+    """
+    Отображает страницу редактора изображений.
+
+    Обрабатывает загрузку изображений и отображает редактор. Сохраняет историю изменений,
+    если пользователь авторизован. Если изображение не загружено, отображает изображение по умолчанию.
+    """
     if request.POST and request.FILES.get('image'):
         uploaded_image = request.FILES['image']
         fs = FileSystemStorage()
@@ -73,12 +94,25 @@ model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
 
 
 def detect_objects(image_path):
+    """
+    Дополнительная функция для обнаружения объектов на изображении.
+
+    Использует модель YOLOv5 для обнаружения объектов на загруженном изображении.
+    Возвращает результаты обработки изображения.
+    """
     results = model(image_path)
     results.render()
     return results
 
 
 def image_upload(request):
+    """
+    Отображает страницу обнаружения объектов.
+
+    Обрабатывает загрузку изображений. Если форма валидна,
+    сохраняет изображение и запускает обнаружение объектов.
+    Сохраняет аннотированное изображение и возвращает его URL.
+    """
     image_url = None
     form = ImageUploadForm(request.POST or None, request.FILES or None)
 
@@ -101,6 +135,9 @@ def image_upload(request):
 
 
 def edit_history_view(request):
+    """
+    Отображает страницу истории изменений для авторизованных пользователей.
+    """
     if request.user.is_authenticated:
         history = EditHistory.objects.filter(user=request.user).order_by('-timestamp')
 

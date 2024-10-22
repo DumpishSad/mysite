@@ -4,6 +4,22 @@ from django.contrib.auth.models import User
 
 
 class RegistrationForm(forms.ModelForm):
+    """
+    Форма регистрации пользователя.
+
+    Используется для регистрации новых пользователей.
+   - Поля:
+     - first_name (CharField): Имя пользователя.
+     - last_name (CharField): Фамилия пользователя.
+     - username (CharField): Уникальное имя пользователя.
+     - password (CharField): Пароль для доступа к учетной записи.
+     - confirm_password (CharField): Подтверждение пароля.
+   - Валидация:
+     - Проверяет совпадение паролей.
+     - Генерирует ошибки валидации для обязательных полей и уникальности имени пользователя.
+   - Метод save():
+     - Хранит пользователя с зашифрованным паролем.
+    """
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Пароль', 'class': 'rounded-input'}),
         min_length=8,
@@ -66,6 +82,16 @@ class RegistrationForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
+    """
+    Форма входа пользователя.
+
+    Используется для входа существующих пользователей.
+   - Поля:
+     - username (CharField): Имя пользователя.
+     - password (CharField): Пароль.
+   - Валидация:
+     - Проверяет заполнение полей и минимальную длину пароля.
+    """
     username = forms.CharField(
         max_length=50,
         widget=forms.TextInput(attrs={'placeholder': 'Имя пользователя', 'class': 'rounded-input'}),
@@ -91,4 +117,9 @@ class LoginForm(forms.Form):
 
 
 class ImageUploadForm(forms.Form):
+    """
+    Форма загрузки изображения.
+
+    Используется для загрузки изображения на сервер.
+    """
     image = forms.ImageField()
